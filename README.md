@@ -1,2 +1,2 @@
 # Linux
-Repositório Linux
+Repositório de Documentação Linux
