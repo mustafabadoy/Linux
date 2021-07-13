@@ -1,0 +1,52 @@
+Configurando o Samba no Red Hat 7 / CentOs 7
+
+1 - Verificando pacotes instalados:
+
+# rpm -qa | grep samba*
+
+2 - Criando o compartilhamento:
+
+# mkdir /home/sistema
+
+3- Alterando as permissões:
+
+# chmod -R 777 /home/sistema
+# chown mbadoy:mbadoy /home/sistema
+
+4 - Adicionando usuário ao samba
+
+# smbpasswd -a mbadoy => inserir a senha
+
+5 - Subindo o serviço:
+
+# systemctl start smb.service
+# systemctl start nmb.service
+
+6 - Verificando status do serviço:
+
+# systemctl status smb.service
+# systemctl status nmb.service
+
+7 - Inciando o serviço no boot:
+
+# systemctl enable smb.service
+# systemctl enable nmb.service
+
+8 - Reiniciando o serviço:
+
+# systemctl restart smb.service
+# systemctl restart nmb.service
+
+9 - Liberando no firewall e no selinux:
+
+# firewall-cmd --permanent --add-service=samba
+# firewall-cmd --reload
+
+# etc/sysconfig => editar arquivo selinux (selinux=permissive) ou
+# etc/sysconfig => editar arquivo config (selinux=permissive) Red Hat 8.2
+
+ou
+
+#setsebool -P samba_enable_home_dirs on
+#restorecon -R /home/sistema/
+#chcon -R -t samba_share_t /home/sistema/
