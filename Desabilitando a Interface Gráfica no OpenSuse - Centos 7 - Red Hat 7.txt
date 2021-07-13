@@ -1,0 +1,10 @@
+Se for como no openSUSE 13.2 (e outros sistemas com o systemd):
+
+logue como root em um terminal e execute:
+
+ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+
+Se quiser reabilitar o modo gráfico:
+
+ln -sf /usr/lib/systemd/system/graphical.target  /etc/systemd/system/default.target
+
