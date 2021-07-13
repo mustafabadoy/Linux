@@ -1,0 +1,73 @@
+Instalando e Configurando o Servidor Red Hat Linux Enterprise 8.3
+
+1- Esquema de Particionamento Personalizado em LVM
+
+Partição Raiz (/) Tipo de Dispositivo: (LVM) Sistema de Arquivos: (XFS)
+Partição Arquivos Temporários (/tmp) Tipo de Disposito: (LVM) Sistema de Arquivos (XFS) - 200MB
+Partição Arquivos de Log (/var) Tipo de Disposito: (LVM) Sistema de Arquivos (XFS) - 500MB
+Partição Arquivos de Usuários(/home) Tipo de Disposito: (LVM) Sistema de Arquivos (XFS)
+Partição Arquivos Inicialização (/boot) Tipo de Disposito: (Partição Padrão) Sistema de Arquivos (XFS) - 350MB
+Partição Arquivos de Troca (/swap) Tipo de Disposito: (LVM) Sistema de Arquivos (swap) 2GB
+
+Configurando o Samba (Servidor de Arquivos)
+
+1- Verificando pacotes instalados:
+
+# rpm -qa | grep samba*
+
+2- Criando o compartilhamento:
+
+# mkdir /home/sistema
+
+3- Alterando as permissões:
+
+# chmod -R 777 /home/sistema
+# chown mbadoy:mbadoy /home/sistema
+
+4- Adicionando usuário ao samba
+
+# smbpasswd -a mbadoy => inserir a senha
+
+5- Configurando o arquivo smb.conf
+
+Adicionando os compartilhamentos
+
+[Sistema]
+	comment = Diretório Sistema
+	path = /home/sistema
+	writable = yes
+	read only = no 
+	guest ok = yes
+	browseable = yes
+
+Verificando o arquivo smb.conf
+
+#testparm
+
+6- Subindo o serviço:
+
+# systemctl start smb.service
+# systemctl start nmb.service
+
+7- Verificando status do serviço:
+
+# systemctl status smb.service
+# systemctl status nmb.service
+
+8- Inciando o serviço no boot:
+
+# systemctl enable smb.service
+# systemctl enable nmb.service
+
+9- Reiniciando o serviço:
+
+# systemctl restart smb.service
+# systemctl restart nmb.service
+
+10- Liberando no firewall e no selinux:
+
+# firewall-cmd --permanent --zone=public --add-service=samba
+# chcon -R -t samba_share_t /home/sistema
+# firewall-cmd --reload
+
+
